@@ -42,6 +42,6 @@ public class Usuario {
 		return "Usuario [nombre=" + nombre + ", email=" + email + ", tipoUsuario=" + tipoUsuario + "]";
 	}
 
-	
+	 public abstract void gestionarInventario();
 
 }
