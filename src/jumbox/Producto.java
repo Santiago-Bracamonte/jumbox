@@ -67,18 +67,5 @@ public class Producto {
 				+ fechaVto + ", stock=" + stock + ", ubicacion=" + ubicacion + "]";
 	}
 	
-
-    public boolean aplicarDescuento() {
-        LocalDate hoy = LocalDate.now();
-        LocalDate dosMesesDesdeAhora = hoy.plusMonths(2);
-
-        if (fechaVto.isBefore(dosMesesDesdeAhora) || fechaVto.isEqual(dosMesesDesdeAhora)) {
-            this.precio = this.precio / 2;
-            JOptionPane.showMessageDialog(null, "Se aplicó un descuento del 50% ya que el producto: " + this.getNombre() + " 	vencerá en los proximos dos meses");
-            return true; // Se aplicó descuento
-        }
-        return false; // No se aplicó descuento
-    }
-	
 	
 }

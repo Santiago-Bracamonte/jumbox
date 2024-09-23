@@ -8,14 +8,13 @@ import javax.swing.JOptionPane;
 public class Jumbox {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
 		LinkedList<Usuario> usuarios = new LinkedList<>();
 		
 		 Administrador admin = new Administrador("Santiago", "santiago@gmail.com", "admin123");
 	        Cajero cajero = new Cajero("Maria", "maria@gmail.com", "maria123");
 	        EncargadoDeposito encargado = new EncargadoDeposito("Carlos", "carlos@gmail.com", "carlos123");
 	        
-	        // Añadir usuarios a la lista
+	   
 	        usuarios.add(admin);
 	        usuarios.add(cajero);
 	        usuarios.add(encargado);
@@ -77,7 +76,7 @@ public class Jumbox {
 	                            "Comidas Preparadas", "Perfumería", "Limpieza", "Mascotas"
 	                        };
 
-	                        // Selección de categoría
+
 	                        String categoria = (String) JOptionPane.showInputDialog(null,
 	                                "Seleccione la categoría del producto:", 
 	                                "Categorías", JOptionPane.PLAIN_MESSAGE, 
@@ -92,9 +91,9 @@ public class Jumbox {
 	                        try {
 	                            fechaVto = LocalDate.parse(JOptionPane.showInputDialog(null, "Ingrese la fecha de vencimiento (YYYY-MM-DD):"));
 	                            if (fechaVto.isBefore(LocalDate.now())) {
-	                                JOptionPane.showMessageDialog(null, "La fecha de vencimiento no puede ser futura. Inténtelo de nuevo.");
+	                                JOptionPane.showMessageDialog(null, "La fecha de vencimiento no puede anterior al día actual ya que estaría vencido el producto. Inténtelo de nuevo.");
 	                            } else {
-	                                fechaValida = true; // Fecha válida
+	                                fechaValida = true;
 	                            }
 	                        } catch (Exception e) {
 	                            JOptionPane.showMessageDialog(null, "Formato de fecha incorrecto. Por favor, use el formato correcto con sus guiones incluidos YYYY-MM-DD.");
@@ -103,10 +102,9 @@ public class Jumbox {
 
 	                    Producto nuevoProducto = new Producto(nombre, categoria, precio, fechaVto, stock, ubicacion);
 	                    usuarioActual.agregarProducto(nuevoProducto);
-	                    nuevoProducto.aplicarDescuento();
-	                    if (nuevoProducto.getStock()<100) {
-	                        JOptionPane.showMessageDialog(null, "Alerta: El stock de " + nuevoProducto.getNombre() + " es bajo (" + nuevoProducto.getStock() + " unidades).", "Alerta de Stock", JOptionPane.WARNING_MESSAGE);
-						}
+	                    Notificacion notificacion = new Notificacion(LocalDate.now(), "Stock bajo", "Pendiente");
+	                    notificacion.generarNotificacionStockBajo(nuevoProducto);
+	      
 	                    
 	                    break;
 
@@ -129,6 +127,10 @@ public class Jumbox {
 	                        if (productoModificado != null) {
 	                            int nuevoStock = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el nuevo stock:"));
 	                            usuarioActual.modificarProducto(productoModificado, nuevoStock);
+	                         Notificacion notificacion2 = new Notificacion(LocalDate.now(), "Stock bajo", "Pendiente");
+	                         if (nuevoStock<100) {
+	                        	 notificacion2.generarNotificacionStockBajo(productoModificado);
+							}
 	                        } else {
 	                            JOptionPane.showMessageDialog(null, "Producto no encontrado.");
 	                        }
@@ -145,6 +147,8 @@ public class Jumbox {
 	                        JOptionPane.showMessageDialog(null, "Operación no permitida.");
 	                    }
 	                    break;
+	                   
+	                
 
 	                default:
 	                    JOptionPane.showMessageDialog(null, "Opción no válida.");

@@ -2,6 +2,8 @@ package jumbox;
 
 import java.time.LocalDate;
 
+import javax.swing.JOptionPane;
+
 public class Notificacion {
 	
 	private LocalDate fechaNotificacion;
@@ -36,7 +38,24 @@ public class Notificacion {
 		return "Notificacion [fechaNotificacion=" + fechaNotificacion + ", tipoNotificacion=" + tipoNotificacion
 				+ ", estado=" + estado + "]";
 	}
-	
+		public void generarNotificacionStockBajo(Producto producto) {
+			if (producto.getStock()<100) {
+				 String tipoNotificacion = "Stock bajo";
+			        String estado = "Pendiente";
+
+			        Notificacion notificacion = new Notificacion(fechaNotificacion, tipoNotificacion, estado);
+			        
+			        // Mostrar notificación usando JOptionPane
+			        JOptionPane.showMessageDialog(null, 
+			            "Notificación generada:\n" +
+			            "Tipo: " + tipoNotificacion + "\n" +
+			            "Estado: " + estado + "\n" +
+			            "Producto: " + producto.getNombre() + "\n" +
+			            "Stock actual: " + producto.getStock() + " unidades.",
+			            "Alerta de Stock Bajo", 
+			            JOptionPane.WARNING_MESSAGE);
+			    }
+		}
 	
 	
 }
