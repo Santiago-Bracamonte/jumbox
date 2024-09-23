@@ -70,15 +70,43 @@ public class Jumbox {
 	            switch (opcion) {
 	                case "Agregar producto":
 	                    String nombre = JOptionPane.showInputDialog(null, "Ingrese el nombre del producto:");
-	                    String categoria = JOptionPane.showInputDialog(null, "Ingrese la categoría del producto:");
+	                    String[] categorias = {
+	                            "Electro", "Hogar y Textil", "Tiempo Libre", "Bebés y Niños", 
+	                            "Almacén", "Bebidas", "Frutas y Verduras", "Carnes", "Pescados y Mariscos",
+	                            "Quesos y Fiambres", "Lácteos", "Congelados", "Panadería y Repostería", 
+	                            "Comidas Preparadas", "Perfumería", "Limpieza", "Mascotas"
+	                        };
+
+	                        // Selección de categoría
+	                        String categoria = (String) JOptionPane.showInputDialog(null,
+	                                "Seleccione la categoría del producto:", 
+	                                "Categorías", JOptionPane.PLAIN_MESSAGE, 
+	                                null, categorias, categorias[0]);
 	                    double precio = Double.parseDouble(JOptionPane.showInputDialog(null, "Ingrese el precio del producto:"));
 	                    int stock = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el stock del producto:"));
 	                    String ubicacion = JOptionPane.showInputDialog(null, "Ingrese la ubicación del producto:");
-	                    LocalDate fechaVto = LocalDate.parse(JOptionPane.showInputDialog(null, "Ingrese la fecha de vencimiento (YYYY-MM-DD):"));
+	                    LocalDate fechaVto = null;
+	                    boolean fechaValida = false;
+	                    
+	                    while (!fechaValida) {
+	                        try {
+	                            fechaVto = LocalDate.parse(JOptionPane.showInputDialog(null, "Ingrese la fecha de vencimiento (YYYY-MM-DD):"));
+	                            if (fechaVto.isBefore(LocalDate.now())) {
+	                                JOptionPane.showMessageDialog(null, "La fecha de vencimiento no puede ser futura. Inténtelo de nuevo.");
+	                            } else {
+	                                fechaValida = true; // Fecha válida
+	                            }
+	                        } catch (Exception e) {
+	                            JOptionPane.showMessageDialog(null, "Formato de fecha incorrecto. Por favor, use el formato correcto con sus guiones incluidos YYYY-MM-DD.");
+	                        }
+	                    }
+
 	                    Producto nuevoProducto = new Producto(nombre, categoria, precio, fechaVto, stock, ubicacion);
 	                    usuarioActual.agregarProducto(nuevoProducto);
-	                    
 	                    nuevoProducto.aplicarDescuento();
+	                    if (nuevoProducto.getStock()<100) {
+	                        JOptionPane.showMessageDialog(null, "Alerta: El stock de " + nuevoProducto.getNombre() + " es bajo (" + nuevoProducto.getStock() + " unidades).", "Alerta de Stock", JOptionPane.WARNING_MESSAGE);
+						}
 	                    
 	                    break;
 

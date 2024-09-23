@@ -74,7 +74,7 @@ public class Producto {
 
         if (fechaVto.isBefore(dosMesesDesdeAhora) || fechaVto.isEqual(dosMesesDesdeAhora)) {
             this.precio = this.precio / 2;
-            JOptionPane.showMessageDialog(null, "Se aplicó un descuento del 50% ya que el producto: " + this.getNombre() + "vencerá en los proximos dos meses");
+            JOptionPane.showMessageDialog(null, "Se aplicó un descuento del 50% ya que el producto: " + this.getNombre() + " 	vencerá en los proximos dos meses");
             return true; // Se aplicó descuento
         }
         return false; // No se aplicó descuento
