@@ -41,11 +41,8 @@ public class Notificacion {
 		public void generarNotificacionStockBajo(Producto producto) {
 			if (producto.getStock()<100) {
 				 String tipoNotificacion = "Stock bajo";
-			        String estado = "Pendiente";
-
-			        Notificacion notificacion = new Notificacion(fechaNotificacion, tipoNotificacion, estado);
-			        
-			        // Mostrar notificación usando JOptionPane
+			        String estado = "Pendiente";			        
+			       
 			        JOptionPane.showMessageDialog(null, 
 			            "Notificación generada:\n" +
 			            "Tipo: " + tipoNotificacion + "\n" +

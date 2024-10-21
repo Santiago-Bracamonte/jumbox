@@ -24,6 +24,19 @@ public class Producto {
 		this.ubicacion = ubicacion;
 	}
 	
+	
+	
+	public Producto(String nombre, String categoria, double precio, int stock, String ubicacion) {
+		super();
+		this.nombre = nombre;
+		this.categoria = categoria;
+		this.precio = precio;
+		this.stock = stock;
+		this.ubicacion = ubicacion;
+	}
+
+
+
 	public String getNombre() {
 		return nombre;
 	}

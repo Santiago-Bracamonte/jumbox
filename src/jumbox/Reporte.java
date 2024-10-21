@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Reporte {
 
-	private String tipoReporte; //ventas o inventario
+	private String tipoReporte; 
 	private LocalDate fechaReporte;
 	private String datos;
 	

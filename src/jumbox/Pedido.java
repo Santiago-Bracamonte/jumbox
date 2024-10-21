@@ -4,7 +4,7 @@ import java.time.LocalDate;
 
 public class Pedido {
 	private LocalDate fechaPedido;
-	private String estado; // en proceso, rechazado o aprobado
+	private String estado; 
 	private int cantidad;
 	
 	public Pedido(LocalDate fechaPedido, String estado, int cantidad) {

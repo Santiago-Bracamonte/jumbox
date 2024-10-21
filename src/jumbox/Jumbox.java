@@ -8,6 +8,7 @@ import javax.swing.JOptionPane;
 public class Jumbox {
 
 	public static void main(String[] args) {
+		conexion.getInstance().getConnection();
 		LinkedList<Usuario> usuarios = new LinkedList<>();
 		
 		 Administrador admin = new Administrador("Santiago", "santiago@gmail.com", "admin123");
@@ -99,25 +100,30 @@ public class Jumbox {
 	                            JOptionPane.showMessageDialog(null, "Formato de fecha incorrecto. Por favor, use el formato correcto con sus guiones incluidos YYYY-MM-DD.");
 	                        }
 	                    }
+	                    
 
 	                    Producto nuevoProducto = new Producto(nombre, categoria, precio, fechaVto, stock, ubicacion);
+	                    Descuento descuento = new Descuento(50, LocalDate.now(), fechaVto) {
+	                        @Override
+	                        public boolean aplicarDescuento(Producto producto) {
+	                            return super.aplicarDescuento(producto);
+	                        }
+	                    };
+	                    
+	                    if (descuento.aplicarDescuento(nuevoProducto)) {
+	                        JOptionPane.showMessageDialog(null, 
+	                            "Se aplicó un descuento del 50% ya que el producto: " + nuevoProducto.getNombre() + 
+	                            " vencerá en los próximos dos meses. \nNuevo precio: $" + nuevoProducto.getPrecio());
+	                    }
 	                    usuarioActual.agregarProducto(nuevoProducto);
+	                    
 	                    Notificacion notificacion = new Notificacion(LocalDate.now(), "Stock bajo", "Pendiente");
 	                    notificacion.generarNotificacionStockBajo(nuevoProducto);
-	      
 	                    
 	                    break;
 
 	                case "Ver productos":
-	                    String productosList = "";
-	                    if (usuarioActual.productos.isEmpty()) {
-	                        productosList = "No hay productos para mostrar.";
-	                    } else {
-	                        for (Producto producto : usuarioActual.productos) {
-	                            productosList += producto.toString() + "\n";
-	                        }
-	                    }
-	                    JOptionPane.showMessageDialog(null, productosList);
+	                    usuarioActual.verProductos();
 	                    break;
 	                    
 	                case "Modificar stock de producto":
