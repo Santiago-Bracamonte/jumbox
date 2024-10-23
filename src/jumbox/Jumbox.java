@@ -13,7 +13,7 @@ public class Jumbox {
         boolean salir = false;
         Usuario usuarioActual = null;
 
-        while (!salir && usuarioActual == null) { // Solo continuar si no hay usuario logueado
+        while (!salir && usuarioActual == null) {
             String[] opciones = { "Iniciar Sesión", "Registrarse", "Salir" };
             String opcion = (String) JOptionPane.showInputDialog(null, "Seleccione una opción", "Menú principal",
                     JOptionPane.PLAIN_MESSAGE, null, opciones, opciones[0]);
@@ -32,7 +32,7 @@ public class Jumbox {
                     usuarioActual = Usuario.iniciarSesion(email, contrasena);
                     if (usuarioActual != null) {
                         JOptionPane.showMessageDialog(null, "Bienvenido " + usuarioActual.getNombre());
-                        break; // Romper el bucle si se inicia sesión correctamente
+                        break; 
                     } else {
                         JOptionPane.showMessageDialog(null, "Credenciales incorrectas. Intente nuevamente.");
                     }
@@ -47,7 +47,6 @@ public class Jumbox {
             }
         }
 
-        // Segundo bucle para acciones después de iniciar sesión
         while (!salir) {
             LinkedList<String> opcionesList = new LinkedList<>();
             opcionesList.add("Agregar producto");
@@ -132,7 +131,8 @@ public class Jumbox {
                     if (usuarioActual instanceof Administrador || usuarioActual instanceof EncargadoDeposito) {
                         String prodModificar = JOptionPane.showInputDialog(null, "Ingrese el nombre del producto para modificar:");
                         Producto productoModificado = usuarioActual.buscarProductoPorNombre(prodModificar);
-                        if (productoModificado != null) {
+     
+                       if (productoModificado != null) {
                             int nuevoStock = Integer.parseInt(JOptionPane.showInputDialog(null, "Ingrese el nuevo stock:"));
                             usuarioActual.modificarProducto(productoModificado, nuevoStock);
                             Notificacion notificacion2 = new Notificacion(LocalDate.now(), "Stock bajo", "Pendiente");
