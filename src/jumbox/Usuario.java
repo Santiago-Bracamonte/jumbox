@@ -1,8 +1,13 @@
 package jumbox;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.LinkedList;
 
 import javax.swing.JOptionPane;
+
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
 
 public abstract class Usuario {
 	private String nombre;
@@ -89,5 +94,68 @@ public abstract class Usuario {
 	    }
 	 public abstract Producto buscarProductoPorNombre(String nombreProducto);
 
+	 public static Usuario iniciarSesion(String email, String contrasena) {
+		 Connection conn = (Connection) conexion.getInstance().getConnection();
+	        Usuario usuarioEncontrado = null;
+
+	        try {
+	            String query = "SELECT * FROM usuario WHERE email = ? AND contrasena = ?";
+	            PreparedStatement statement = (PreparedStatement) conn.prepareStatement(query);
+	            statement.setString(1, email);
+	            statement.setString(2, contrasena);
+
+	            ResultSet resultSet = statement.executeQuery();
+
+	            if (resultSet.next()) {
+	                String nombre = resultSet.getString("nombre");
+	                String tipoUsuario = resultSet.getString("tipo_usuario");
+
+	                if (tipoUsuario.equalsIgnoreCase("Administrador")) {
+	                    usuarioEncontrado = new Administrador(nombre, email, contrasena);
+	                } else if (tipoUsuario.equalsIgnoreCase("Cajero")) {
+	                    usuarioEncontrado = new Cajero(nombre, email, contrasena);
+	                } else if (tipoUsuario.equalsIgnoreCase("EncargadoDeposito")) {
+	                    usuarioEncontrado = new EncargadoDeposito(nombre, email, contrasena);
+	                }
+
+	                JOptionPane.showMessageDialog(null, "Inicio de sesión exitoso. ¡Bienvenido, " + nombre + "!");
+	            } else {
+	                JOptionPane.showMessageDialog(null, "Email o contraseña incorrectos", "Error de autenticación", JOptionPane.ERROR_MESSAGE);
+	            }
+
+	        } catch (SQLException e) {
+	            JOptionPane.showMessageDialog(null, "Error al acceder a la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+	        }
+
+	        return usuarioEncontrado;
+	    }
+		 
+	 public static void registrarUsuario() {
+			Connection conn = (Connection) conexion.getInstance().getConnection();
+
+			String nombre = JOptionPane.showInputDialog("Ingrese su nombre:");
+			String email = JOptionPane.showInputDialog("Ingrese su email:");
+			String contrasena = JOptionPane.showInputDialog("Ingrese su contraseña:");
+
+			String []tipoUsuario = { "Adminsitrador", "Cajero", "Encargado de Deposito" };
+			String opcion = (String) JOptionPane.showInputDialog(null, "Seleccione una opción", "Menú principal",
+					JOptionPane.PLAIN_MESSAGE, null, tipoUsuario, tipoUsuario[0]);
+			try {
+				String query = "INSERT INTO usuario (nombre, email, contrasena, tipo_usuario) VALUES (?, ?, ?, ?)";
+				PreparedStatement statement = (PreparedStatement) conn.prepareStatement(query);
+				statement.setString(1, nombre);
+				statement.setString(2, email);
+				statement.setString(3, contrasena);
+				statement.setString(4, opcion);
+
+				int filas = statement.executeUpdate();
+				if (filas > 0) {
+					JOptionPane.showMessageDialog(null, "Registro exitoso");
+				}
+			} catch (SQLException e) {
+				JOptionPane.showMessageDialog(null, "Error al registrar usuario en la base de datos.", "Error", JOptionPane.ERROR_MESSAGE);
+			}
+		}
+	 
 }
 
